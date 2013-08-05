@@ -30,6 +30,8 @@ class Hasher
             if _.isNumber value
               value = escape(value)
           @params[key] = value
+          if value is ''
+            delete @params[key]
           if @params?[removekey]?
             delete @params[removekey]
           do @push
