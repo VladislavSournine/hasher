@@ -17,15 +17,21 @@ class Hasher
             return
     set: (key,value,removekey = null) ->
         if key? and value?
-            do @load
-            if typeIsArray value
-                value = value.join()
-            else
+          do @load
+          if typeIsArray value
+              result = []
+              for k,v of value
+                z = parseInt(v,10)
+                if (z+'') == v
+                  result.push z
+              value = result.join()
+          else
+              if _.isNumber value
                 value = escape(value)
-            @params[key] = value
-            if @params?[removekey]?
-              delete @params[removekey]
-            do @push
+          @params[key] = value
+          if @params?[removekey]?
+            delete @params[removekey]
+          do @push
     clear: () ->
         @params = {}
         window.itsnothasher = false
