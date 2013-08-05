@@ -13,7 +13,7 @@ class Hasher
                 do @load
                 do @func
             else
-                window.itsnothasher = true    
+                window.itsnothasher = true
             return
     set: (key,value,removekey = null) ->
         if key? and value?
@@ -21,13 +21,14 @@ class Hasher
           if typeIsArray value
               result = []
               for k,v of value
-                z = parseInt(v,10)
-                if (z+'') == v
-                  result.push z
+                if v
+                  z = parseInt(v,10)
+                  if not _.isNaN(z)
+                    result.push z
               value = result.join()
           else
-              if _.isNumber value
-                value = escape(value)
+            if _.isNumber value
+              value = escape(value)
           @params[key] = value
           if @params?[removekey]?
             delete @params[removekey]
