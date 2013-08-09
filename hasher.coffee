@@ -15,16 +15,19 @@ class Hasher
             else
                 window.itsnothasher = true
             return
-    set: (key,value,removekey = null) ->
+    set: (key,value,removekey = null,integer = true) ->
         if key? and value?
           do @load
           if typeIsArray value
               result = []
               for k,v of value
                 if v
-                  z = parseInt(v,10)
-                  if not _.isNaN(z)
-                    result.push z
+                  if integer
+                    z = parseInt(v,10)
+                    if not _.isNaN(z)
+                      result.push z
+                  else
+                    result.push v
               value = result.join()
           else
             if _.isNumber value
@@ -32,13 +35,15 @@ class Hasher
           @params[key] = value
           if value is ''
             delete @params[key]
-          if @params?[removekey]?
-            delete @params[removekey]
+          if removekey
+            for k,v of removekey
+              if @params?[v]?
+                delete @params[v]
           do @push
     clear: () ->
         @params = {}
         window.itsnothasher = false
-        window.location.hash = null
+        window.location.hash = ''
     remove: (key,value) ->
         if @params?[key]?
             delete @params[key]
